@@ -225,8 +225,19 @@
 (define t14 '((if #t car cdr) (cons 4 2)))
 (define t15 '(last (cons 4 (cons 1 (cons 2 ())))))
 
-(define (go t) (js->javascript (scm->js t)) (newline) (newline))
+(define (go t) (js->javascript (scm->js t)) (newline))
 
+(define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15))
+
+(define (run)
+  (for-each (lambda (t)
+	      (display "document.write(")
+	      (write (with-output-to-string (lambda () (write t))))
+	      (display "+\": \"+")
+	      (newline)
+	      (go t)
+	      (display "+\"<br/>\");")
+	      (newline) (newline)) tests))
 
 ;(define t15 '((define (x y) y) (x 1)))
 (define (go-top t)
