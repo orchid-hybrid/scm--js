@@ -25,6 +25,7 @@
 (define (lambda-expression? exp)
   (and (list? exp) (eq? (car exp) 'lambda) (list? (cadr exp)) (list? (cddr exp))))
 (define (begin-expression? exp) (kind-of-expression? 'begin 'one+ exp))
+(define (define-expression? exp) (kind-of-expression? 'define 'one+ exp))
 
 (define (runtime-primitive? op)
   (cond ((eq? op '+) 'js-plus)
@@ -32,6 +33,17 @@
 	((eq? op '*) 'js-times)
 	((eq? op 'runtime-booleanize) 'runtime-booleanize)
 	(else #f)))
+
+(define (scm-top->js scm)
+  (cond ((define-expression? scm)
+         (if (symbol? (cadr scm))
+             `(js-declare-var ,(cadr scm) ,(caddr scm))
+             `(js-named-function
+               ,(caadr scm)
+               ,(cdadr scm)
+               . ,(append (map scm->js (but-last (cddr scm)))
+                          (list `(js-return ,(scm->js (last (cddr scm)))))))))
+        (else (scm->js scm))))
 
 (define (scm->js scm)
   (cond ((number? scm) scm)
@@ -45,14 +57,14 @@
         ((lambda-expression? scm)
          `(js-function
            ,(cadr scm)
-           (js-return ,(scm->js (caddr scm)))))
+           . ,(append (map scm->js (but-last (cddr scm)))
+                          (list `(js-return ,(scm->js (last (cddr scm))))))))
 
 	((if-expression? scm) `(js-if (js-funcall runtime-booleanize ,(scm->js (cadr scm)))
 				      ,(scm->js (caddr scm))
 				      ,(scm->js (cadddr scm))))
         ((begin-expression? scm)
-	 `(js-funcall* (js-function () . ,(append (map scm->js (but-last (cdr scm)))
-						  (list `(js-return ,(scm->js (last (cdr scm)))))))))
+	 (scm->js `((lambda () . ,(cdr scm)))))
 
 	((and (list? scm) (runtime-primitive? (car scm)))
 	 `(js-funcall ,(runtime-primitive? (car scm)) . ,(map scm->js (cdr scm))))
@@ -70,6 +82,7 @@
 (define (js-function? js) (kind-of-expression? 'js-function 'one+ js))
 (define (js-return? js) (kind-of-expression? 'js-return 1 js))
 (define (js-var? js) (kind-of-expression? 'js-var 1 js))
+(define (js-named-function? js) (kind-of-expression? 'js-named-function 'one+ js))
 
 (define (mangle-name name)
   (string->symbol (list->string (mangle-helper (string->list (symbol->string name))))))
@@ -134,6 +147,15 @@
          (display ")")
          (display "{")
          (do-js-sequence (cddr js))
+         (display "}"))
+        ((js-named-function? js)
+         (display "function ")
+         (display (mangle-name (cadr js)))
+         (display "(")
+         (do-js-funargs (caddr js))
+         (display ")")
+         (display "{")
+         (do-js-sequence (cdddr js))
          (display "}"))))
 
 (define (do-js-object-literal kvs)
@@ -199,3 +221,9 @@
 (define t14 '((if #t car cdr) (cons 4 2)))
 
 (define (go t) (js->javascript (scm->js t)) (newline) (newline))
+
+
+(define t15 '((define (x y) y) (x 1)))
+(define (go-top t)
+  (for-each (lambda (t) (js->javascript (scm-top->js t)) (display ";") (newline)) t)
+  (newline))
