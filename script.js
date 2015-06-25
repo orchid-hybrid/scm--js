@@ -166,23 +166,23 @@ document.write("(even? 42)"+": "+
 write_to_string(((even_huh_)(42))
 )+"<br/>");
 
-document.write("(go 42)"+": "+
+document.write("(go (quote 42))"+": "+
 write_to_string(((go)(42))
 )+"<br/>");
 
-document.write("(go (car (cons 4 2)))"+": "+
-write_to_string(((go)((car)((cons)(4, 2))))
+document.write("(write (scm->js (quote (car (cons 4 2)))))"+": "+
+write_to_string(((write)((scm_dash__gt_js)(cons((string_dash__gt_symbol)("car"), cons(cons((string_dash__gt_symbol)("cons"), cons(4, cons(2, null))), null)))))
 )+"<br/>");
 
-document.write("(go (cdr (cons 4 2)))"+": "+
-write_to_string(((go)((cdr)((cons)(4, 2))))
+document.write("(write (scm->js (quote (cdr (cons 4 2)))))"+": "+
+write_to_string(((write)((scm_dash__gt_js)(cons((string_dash__gt_symbol)("cdr"), cons(cons((string_dash__gt_symbol)("cons"), cons(4, cons(2, null))), null)))))
 )+"<br/>");
 
-document.write("(go (+ (car (cons 4 2)) (cdr (cons 4 2))))"+": "+
-write_to_string(((go)(js_dash_plus((car)((cons)(4, 2)), (cdr)((cons)(4, 2)))))
+document.write("(js->javascript (quote (js-funcall* (js-var car) (js-funcall* (js-var cons) 4))))"+": "+
+write_to_string(((js_dash__gt_javascript)(cons((string_dash__gt_symbol)("js-funcall*"), cons(cons((string_dash__gt_symbol)("js-var"), cons((string_dash__gt_symbol)("car"), null)), cons(cons((string_dash__gt_symbol)("js-funcall*"), cons(cons((string_dash__gt_symbol)("js-var"), cons((string_dash__gt_symbol)("cons"), null)), cons(4, null))), null)))))
 )+"<br/>");
 
-document.write("(go (- (+ 42 (* 3 6)) 7))"+": "+
-write_to_string(((go)(js_dash_minus(js_dash_plus(42, js_dash_times(3, 6)), 7)))
+document.write("(go (quote (- (+ 42 (* 3 6)) 7)))"+": "+
+write_to_string(((go)(cons((string_dash__gt_symbol)("-"), cons(cons((string_dash__gt_symbol)("+"), cons(42, cons(cons((string_dash__gt_symbol)("*"), cons(3, cons(6, null))), null))), cons(7, null)))))
 )+"<br/>");
 
