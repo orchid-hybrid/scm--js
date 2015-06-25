@@ -1,3 +1,3 @@
-csi scm-\>js.scm -e '(std)' > standard.js
-csi scm-\>js.scm -e '(run)' > script.js
-csi scm-\>js.scm -e '(compile-compiler)' > compiler.js
+csi test.scm -e '(std)' > standard.js
+csi test.scm -e '(run)' > script.js
+csi test.scm -e '(compile-compiler)' > compiler.js
