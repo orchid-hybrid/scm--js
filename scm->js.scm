@@ -329,10 +329,11 @@
 (define t36 '(runtime-primitive? 'string->symbol))
 (define t37 '(list->string (list #\h #\i)))
 (define t38 '(char? (car (list #\h #\i))))
+(define t39 '(mangle-name '?aa))
 
 (define (go t) (display "(") (js->javascript (scm->js t)) (display ")") (newline))
 
-(define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15 t16 t17 t18 t19 t20 t21 t22 t23 t24 t25 t26 t27 t28 t29 t30 t31 t32 t33 t34 t35 t36 t37 t38))
+(define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15 t16 t17 t18 t19 t20 t21 t22 t23 t24 t25 t26 t27 t28 t29 t30 t31 t32 t33 t34 t35 t36 t37 t38 t39))
 
 (define (run)
   (display (with-output-to-string
@@ -384,6 +385,9 @@
     (define (map f xs)
       (if (null? xs) '() (cons (f (car xs) (map f (cdr xs))))))
 
+    (define (append x y)
+      (if (null? x) y (cons (car x) (append (cdr x) y))))
+
     (define (but-last l)
       (if (null? l)
 	  '()
@@ -434,6 +438,25 @@
 	    ((eq? op 'cons) 'cons)
 	    (else #f)))
     
+(define (mangle-name name)
+  (string->symbol (list->string (mangle-helper (string->list (symbol->string name))))))
+(define (mangle-helper n)
+  (if (null? n)
+      '()
+      (cond ((eq? #\- (car n))
+	     (append (string->list "_dash_") (mangle-helper (cdr n))))
+	    ((eq? #\? (car n))
+	     (append (string->list "_huh_") (mangle-helper (cdr n))))
+	    ((eq? #\_ (car n))
+	     (append (string->list "_underscore_") (mangle-helper (cdr n))))
+            ((eq? #\> (car n))
+             (append (string->list "_gt_") (mangle-helper (cdr n))))
+            ((eq? #\! (car n))
+             (append (string->list "_bang_") (mangle-helper (cdr n))))
+            ((eq? #\= (car n))
+             (append (string->list "_eq_") (mangle-helper (cdr n))))
+	    (else
+	     (cons (car n) (mangle-helper (cdr n)))))))
     ))
 
 (define (std)

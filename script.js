@@ -150,3 +150,7 @@ document.write("(char? (car (list #\\h #\\i)))"+": "+
 ((char_huh_)((car)((list)("h", "i"))))
 +"<br/>");
 
+document.write("(mangle-name (quote ?aa))"+": "+
+((mangle_dash_name)(js_dash_string_dash__gt_symbol("?aa")))
++"<br/>");
+
