@@ -122,3 +122,7 @@ document.write("(and 1 #f 2 3)"+": "+
 ((runtime_dash_booleanize(1))?((runtime_dash_booleanize(false))?((runtime_dash_booleanize(2))?((runtime_dash_booleanize(3))?(true):(false)):(false)):(false)):(false))
 +"<br/>");
 
+document.write("(list->string (but-last (string->list \"foobar\")))"+": "+
+((list_dash__gt_string)((but_dash_last)((string_dash__gt_list)("foobar"))))
++"<br/>");
+

@@ -319,10 +319,11 @@
 (define t29 '(car (cdr (list (list? 'a) (list? '(a b)) (list? '())))))
 (define t30 '(and 1 2 3))
 (define t31 '(and 1 #f 2 3))
+(define t32 '(list->string (but-last (string->list "foobar"))))
 
 (define (go t) (display "(") (js->javascript (scm->js t)) (display ")") (newline))
 
-(define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15 t16 t17 t18 t19 t20 t21 t22 t23 t24 t25 t26 t27 t28 t29 t30 t31))
+(define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15 t16 t17 t18 t19 t20 t21 t22 t23 t24 t25 t26 t27 t28 t29 t30 t31 t32))
 
 (define (run)
   (display (with-output-to-string
@@ -342,15 +343,26 @@
   (newline))
 
 (define standard
-  '((define (last l)
-       (if (null? l)
-	   #f
-	   (if (null? (cdr l))
-	       (car l)
-	       (last (cdr l)))))
+  '((define (but-last l)
+      (if (null? l)
+	  '()
+	  (if (null? (cdr l))
+	      '()
+	      (cons (car l) (but-last (cdr l))))))
+    (define (last l)
+      (if (null? l)
+	  #f
+	  (if (null? (cdr l))
+	      (car l)
+	      (last (cdr l)))))
     (define (not b)
       (if b #f #t))
-    (define (list? l) (or (null? l) (pair? l)))))
+    (define (list? l) (or (null? l) (pair? l)))
+    (define (char->string c) c) ;; js
+    (define (list->string l)
+      (if (null? l)
+	  ""
+	  (string-append (char->string (car l)) (list->string (cdr l)))))))
 
 (define (std)
   (go-top standard))

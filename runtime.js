@@ -1,6 +1,7 @@
 function runtime_dash_booleanize(b){return (b !== false);}
 
 function Pair(a, d) { this.car = a; this.cdr = d }
+Pair.prototype.toString = function () { return ["(", this.car.toString(), " . ", this.cdr.toString() ,")"].join(""); }
 
 function cons(a, d) { return new Pair(a, d); }
 function car(c){return c.car;}
@@ -31,6 +32,13 @@ function array_to_list(arr) {
     var memo = null;
     while(i > 0) { memo = cons(arr[--i], memo); }
     return memo;
+}
+
+function string_dash__gt_list(s) {
+    return array_to_list(s);
+}
+function string_dash_append(s1, s2) {
+    return s1 + s2;
 }
 
 function list() {
