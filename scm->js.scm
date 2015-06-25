@@ -225,7 +225,7 @@
 (define t14 '((if #t car cdr) (cons 4 2)))
 (define t15 '(last (cons 4 (cons 1 (cons 2 ())))))
 
-(define (go t) (js->javascript (scm->js t)) (newline))
+(define (go t) (display "(") (js->javascript (scm->js t)) (display ")") (newline))
 
 (define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15))
 
