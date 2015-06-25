@@ -35,7 +35,7 @@
 	((eq? op '-) 'js-minus)
 	((eq? op '*) 'js-times)
 	((eq? op 'runtime-booleanize) 'runtime-booleanize)
-        ((eq? op 'symbol->string) 'js-string->symbol)
+        ((eq? op 'symbol->string) 'js-symbol->string)
         ((eq? op 'string->symbol) 'js-string->symbol)
         ((eq? op 'cons) 'cons)
 	(else #f)))
@@ -343,11 +343,13 @@
                            (write (with-output-to-string (lambda () (write t))))
                            (display "+\": \"+")
                            (newline)
+                           (display "write_to_string(")
                            (go t)
+                           (display ")")
                            (display "+\"<br/>\");")
                            (newline) (newline)) tests)))))
 
-;(define t15 '((define (x y) y) (x 1)))
+                                        ;(define t15 '((define (x y) y) (x 1)))
 (define (go-top t)
   (for-each (lambda (t) (js->javascript (scm-top->js t)) (display ";") (newline)) t)
   (newline))
@@ -440,6 +442,7 @@
     
 (define (mangle-name name)
   (string->symbol (list->string (mangle-helper (string->list (symbol->string name))))))
+
 (define (mangle-helper n)
   (if (null? n)
       '()

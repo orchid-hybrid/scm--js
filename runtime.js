@@ -1,7 +1,6 @@
 function runtime_dash_booleanize(b){return (b !== false);}
 
 function Pair(a, d) { this.car = a; this.cdr = d }
-Pair.prototype.toString = function () { return ["(", this.car.toString(), " . ", this.cdr.toString() ,")"].join(""); }
 
 function cons(a, d) { return new Pair(a, d); }
 function car(c){return c.car;}
@@ -53,7 +52,7 @@ function number_huh_(t) { return typeof t === "number"; }
 function boolean_huh_(t) { return typeof t === "boolean"; }
 function string_huh_(t) { return typeof t === "string"; }
 function char_huh_(t) { return typeof t === "string" && t.length == 1; }
-function constant_huh_(t) { return numberp(t) || booleanp(t) || stringp(t); }
+function constant_huh_(t) { return number_huh_(t) || boolean_huh(t) || string_huh_(t); }
 function eq_huh_(x, y) { return x === y }
 function _eq_(x, y) { return (number_huh_(x) && number_huh_(y) && x == y); }
 
@@ -85,4 +84,58 @@ function with_dash_output_dash_to_dash_string(t) {
 
 function newline() {
     display("\n");
+    return true;
+}
+
+function escape_char(c) {
+    switch (c) {
+    case "\\": return "\\\\";
+    case "\"": return "\\\"";
+    case "\n": return "\\n";
+    default: return c
+    }
+}
+
+function quote_string(s) {
+    var len = s.length;
+    var i = 0;
+    var memo = ["\""];
+    while(i < len) { memo.push(escape_char(s[i++])); }
+    memo.push("\"");
+    return memo.join("");
+}
+
+function write_to_string(x) {
+    if (number_huh_(x)) {
+        return x.toString();
+    } else if (boolean_huh_(x)) {
+        return x ? "#t" : "#f";
+    } else if (x === null) {
+        return "()";
+    } else if(string_huh_(x)) {
+        return quote_string(x);
+    } else if (symbol_huh_(x)) {
+        return x.string;
+    } else if (pair_huh_(x)) {
+        var cur = x;
+        var memo = [];
+        while(true) {
+            if(pair_huh_(cur.cdr)) {
+                memo.push(write_to_string(cur.car));
+                cur = cur.cdr;
+            } else if (cur.cdr === null) {
+                memo.push(write_to_string(cur.car));
+                break;
+            } else {
+                memo.push(write_to_string(cur.car));
+                memo.push(".");
+                memo.push(write_to_string(cur.cdr));
+                break;
+            }
+        } return ["(", memo.join(" "), ")"].join("");
+    } else if (x && x.toString && typeof x.toString === "function") {
+        return x.toString();
+    } else {
+        return JSON.stringify(x);
+    }
 }
