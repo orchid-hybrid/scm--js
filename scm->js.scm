@@ -26,6 +26,7 @@
   (and (list? exp) (eq? (car exp) 'lambda) (list? (cadr exp)) (list? (cddr exp))))
 (define (begin-expression? exp) (kind-of-expression? 'begin 'one+ exp))
 (define (define-expression? exp) (kind-of-expression? 'define 'one+ exp))
+(define (quote-expression? exp) (kind-of-expression? 'quote 1 exp))
 
 (define (runtime-primitive? op)
   (cond ((eq? op '+) 'js-plus)
@@ -53,6 +54,7 @@
 	((string? scm) scm)
 	((boolean? scm) scm)
         ((symbol? scm) `(js-var ,scm))
+	((quote-expression? scm) (quoted->js (cadr scm)))
 	((cons-expression? scm) `(js-object-literal car ,(scm->js (cadr scm))
 						    cdr ,(scm->js (caddr scm))))
 	((car-expression? scm) `(js-dot car ,(scm->js (cadr scm))))
@@ -76,6 +78,16 @@
          `(js-funcall* ,(scm->js (car scm)) . ,(map scm->js (cdr scm))))
 
 	))
+
+(define (quoted->js exp)
+  (cond ((number? exp) exp)
+	((string? exp) exp)
+	((boolean? exp) exp)
+	((null? exp) exp)
+	((symbol? exp) (scm->js `(string->symbol ,(symbol->string exp))))
+	((pair? exp)
+	 `(js-object-literal car ,(quoted->js (car exp))
+			     cdr ,(quoted->js (cdr exp))))))
 
 (define (js-object-literal? js) (kind-of-expression? 'js-object-literal 'even js))
 (define (js-dot? js) (kind-of-expression? 'js-dot 2 js))
@@ -229,10 +241,11 @@
 (define t14 '((if #t car cdr) (cons 4 2)))
 (define t15 '(last (cons 4 (cons 1 (cons 2 ())))))
 (define t16 '(string->symbol "x"))
+(define t17 '(car (cdr '(my other car))))
 
 (define (go t) (display "(") (js->javascript (scm->js t)) (display ")") (newline))
 
-(define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15 t16))
+(define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15 t16 t17))
 
 (define (run)
   (for-each (lambda (t)

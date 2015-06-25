@@ -60,3 +60,6 @@ document.write("(last (cons 4 (cons 1 (cons 2 ()))))"+": "+
 ((last)({car:4, cdr:{car:1, cdr:{car:2, cdr:null}}}))
 +"<br/>");
 
+document.write("(car (cdr (quote (my other car))))"+": "+
+((({car:js_dash_string_dash__gt_symbol("my"), cdr:{car:js_dash_string_dash__gt_symbol("other"), cdr:{car:js_dash_string_dash__gt_symbol("car"), cdr:null}}}).cdr).car)
++"<br/>");
