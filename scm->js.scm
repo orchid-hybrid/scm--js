@@ -46,7 +46,8 @@
         (else (scm->js scm))))
 
 (define (scm->js scm)
-  (cond ((number? scm) scm)
+  (cond ((null? scm) scm)
+	((number? scm) scm)
 	((string? scm) scm)
 	((boolean? scm) scm)
         ((symbol? scm) `(js-var ,scm))
@@ -91,13 +92,16 @@
       '()
       (cond ((eq? #\- (car n))
 	     (append (string->list "_dash_") (mangle-helper (cdr n))))
+	    ((eq? #\? (car n))
+	     (append (string->list "_huh_") (mangle-helper (cdr n))))
 	    ((eq? #\_ (car n))
 	     (append (string->list "_underscore_") (mangle-helper (cdr n))))
 	    (else
 	     (cons (car n) (mangle-helper (cdr n)))))))
 
 (define (js->javascript js)
-  (cond ((number? js) (write js))
+  (cond ((null? js) (display "null"))
+	((number? js) (write js))
 	((string? js) (write js))
 	((eq? #t js) (display "true"))
 	((eq? #f js) (display "false"))
@@ -219,11 +223,12 @@
 (define t12 '((lambda (x) x) 1))
 (define t13 '(begin 1 2 3 (begin 4 5 6)))
 (define t14 '((if #t car cdr) (cons 4 2)))
+(define t15 '(last (cons 4 (cons 1 (cons 2 ())))))
 
 (define (go t) (js->javascript (scm->js t)) (newline) (newline))
 
 
-(define t15 '((define (x y) y) (x 1)))
+;(define t15 '((define (x y) y) (x 1)))
 (define (go-top t)
   (for-each (lambda (t) (js->javascript (scm-top->js t)) (display ";") (newline)) t)
   (newline))
