@@ -35,9 +35,6 @@
 	((eq? op '-) 'js-minus)
 	((eq? op '*) 'js-times)
 	((eq? op 'runtime-booleanize) 'runtime-booleanize)
-        ((eq? op 'symbol->string) 'js-symbol->string)
-        ((eq? op 'string->symbol) 'js-string->symbol)
-        ((eq? op 'cons) 'cons)
 	(else #f)))
 
 (define (scm-top->js scm)
@@ -330,10 +327,11 @@
 (define t37 '(list->string (list #\h #\i)))
 (define t38 '(char? (car (list #\h #\i))))
 (define t39 '(mangle-name '?aa))
+(define t40 '(write "asd \" f"))
 
 (define (go t) (display "(") (js->javascript (scm->js t)) (display ")") (newline))
 
-(define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15 t16 t17 t18 t19 t20 t21 t22 t23 t24 t25 t26 t27 t28 t29 t30 t31 t32 t33 t34 t35 t36 t37 t38 t39))
+(define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15 t16 t17 t18 t19 t20 t21 t22 t23 t24 t25 t26 t27 t28 t29 t30 t31 t32 t33 t34 t35 t36 t37 t38 t39 t40))
 
 (define (run)
   (display (with-output-to-string

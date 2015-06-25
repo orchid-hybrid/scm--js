@@ -23,8 +23,8 @@ function __intern(string) {
         return sym;
     }
 }
-function js_dash_symbol_dash__gt_string(s){return s.string}
-function js_dash_string_dash__gt_symbol(s){return __intern(s)}
+function symbol_dash__gt_string(s){return s.string}
+function string_dash__gt_symbol(s){return __intern(s)}
 
 function array_to_list(arr) {
     var i = arr.length;
@@ -139,3 +139,5 @@ function write_to_string(x) {
         return JSON.stringify(x);
     }
 }
+
+function write(s) { return display(write_to_string(s)); }
