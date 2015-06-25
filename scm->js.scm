@@ -143,6 +143,8 @@
 	     (append (string->list "_underscore_") (mangle-helper (cdr n))))
             ((eq? #\> (car n))
              (append (string->list "_gt_") (mangle-helper (cdr n))))
+            ((eq? #\! (car n))
+             (append (string->list "_bang_") (mangle-helper (cdr n))))
 	    (else
 	     (cons (car n) (mangle-helper (cdr n)))))))
 
