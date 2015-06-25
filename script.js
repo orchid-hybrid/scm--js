@@ -98,3 +98,27 @@ document.write("(display \"1\")"+": "+
 ((display)("1"))
 +"<br/>");
 
+document.write("(= 4 5)"+": "+
+((_eq_)(4, 5))
++"<br/>");
+
+document.write("(= 5 5)"+": "+
+((_eq_)(5, 5))
++"<br/>");
+
+document.write("(begin (display \"happy\") (newline) (display \"lucky\") (newline) (display \"dochy\") (newline))"+": "+
+((function(){(display)("happy"); (newline)(); (display)("lucky"); (newline)(); (display)("dochy"); return (newline)()})())
++"<br/>");
+
+document.write("(car (cdr (list (list? (quote a)) (list? (quote (a b))) (list? (quote ())))))"+": "+
+((car)((cdr)((list)((list_huh_)(js_dash_string_dash__gt_symbol("a")), (list_huh_)(cons(js_dash_string_dash__gt_symbol("a"), cons(js_dash_string_dash__gt_symbol("b"), null))), (list_huh_)(null)))))
++"<br/>");
+
+document.write("(and 1 2 3)"+": "+
+((runtime_dash_booleanize(1))?((runtime_dash_booleanize(2))?((runtime_dash_booleanize(3))?(true):(false)):(false)):(false))
++"<br/>");
+
+document.write("(and 1 #f 2 3)"+": "+
+((runtime_dash_booleanize(1))?((runtime_dash_booleanize(false))?((runtime_dash_booleanize(2))?((runtime_dash_booleanize(3))?(true):(false)):(false)):(false)):(false))
++"<br/>");
+

@@ -27,6 +27,8 @@
 (define (quasiquote-expression? exp) (kind-of-expression? 'quasiquote 1 exp))
 (define (unquote-expression? exp) (kind-of-expression? 'unquote 1 exp))
 (define (cond-expression? exp) (and (list? exp) (eq? 'cond (car exp))))
+(define (or-expression? exp) (kind-of-expression? 'or 'one+ exp))
+(define (and-expression? exp) (kind-of-expression? 'and 'one+ exp))
 
 (define (runtime-primitive? op)
   (cond ((eq? op '+) 'js-plus)
@@ -67,6 +69,8 @@
 	((if-expression? scm) `(js-if (js-funcall runtime-booleanize ,(scm->js (cadr scm)))
 				      ,(scm->js (caddr scm))
 				      ,(scm->js (cadddr scm))))
+	((or-expression? scm) (scm->js (or-expression->if (cdr scm))))
+	((and-expression? scm) (scm->js (and-expression->if (cdr scm))))
         ((begin-expression? scm)
 	 (scm->js `((lambda () . ,(cdr scm)))))
 
@@ -77,6 +81,20 @@
          `(js-funcall* ,(scm->js (car scm)) . ,(map scm->js (cdr scm))))
 
 	))
+
+(define (or-expression->if exp)
+  (if (null? exp)
+      #f
+      `(if ,(car exp)
+	   #t
+	   ,(or-expression->if (cdr exp)))))
+
+(define (and-expression->if exp)
+  (if (null? exp)
+      #t
+      `(if ,(car exp)
+	   ,(and-expression->if (cdr exp))
+	   #f)))
 
 (define (quoted->js exp)
   (cond ((number? exp) exp)
@@ -145,6 +163,8 @@
              (append (string->list "_gt_") (mangle-helper (cdr n))))
             ((eq? #\! (car n))
              (append (string->list "_bang_") (mangle-helper (cdr n))))
+            ((eq? #\= (car n))
+             (append (string->list "_eq_") (mangle-helper (cdr n))))
 	    (else
 	     (cons (car n) (mangle-helper (cdr n)))))))
 
@@ -290,10 +310,19 @@
                  (display "2")
                  (display "3"))))
 (define t25 '(display "1"))
+(define t26 '(= 4 5))
+(define t27 '(= 5 5))
+(define t28 '(begin
+	       (display "happy") (newline)
+	       (display "lucky") (newline)
+	       (display "dochy") (newline)))
+(define t29 '(car (cdr (list (list? 'a) (list? '(a b)) (list? '())))))
+(define t30 '(and 1 2 3))
+(define t31 '(and 1 #f 2 3))
 
 (define (go t) (display "(") (js->javascript (scm->js t)) (display ")") (newline))
 
-(define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15 t16 t17 t18 t19 t20 t21 t22 t23 t24 t25))
+(define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15 t16 t17 t18 t19 t20 t21 t22 t23 t24 t25 t26 t27 t28 t29 t30 t31))
 
 (define (run)
   (display (with-output-to-string
@@ -320,7 +349,8 @@
 	       (car l)
 	       (last (cdr l)))))
     (define (not b)
-      (if b #f #t))))
+      (if b #f #t))
+    (define (list? l) (or (null? l) (pair? l)))))
 
 (define (std)
   (go-top standard))

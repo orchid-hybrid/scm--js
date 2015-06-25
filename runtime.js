@@ -46,6 +46,7 @@ function boolean_huh_(t) { return typeof t === "boolean"; }
 function string_huh_(t) { return typeof t === "string"; }
 function constant_huh_(t) { return numberp(t) || booleanp(t) || stringp(t); }
 function eq_huh_(x, y) { return x === y }
+function _eq_(x, y) { return number_huh_(x) && number_huh_(y) && x == y; }
 
 function Box(v) { this.val = v; }
 function box(v) { return new Box(v); }
@@ -71,4 +72,8 @@ function with_dash_output_dash_to_dash_string(t) {
     t();
     set_dash_box_bang_(output_port, old);
     return builder.join();
+}
+
+function newline() {
+    display("\n");
 }
