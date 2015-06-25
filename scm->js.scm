@@ -282,20 +282,27 @@
 (define t21 '(not #t))
 (define t22 '(not #f))
 (define t23 '(not 3))
+(define t24 '(with-output-to-string
+               (lambda ()
+                 (display "1")
+                 (display "2")
+                 (display "3"))))
 
 (define (go t) (display "(") (js->javascript (scm->js t)) (display ")") (newline))
 
-(define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15 t16 t17 t18 t19 t20 t21 t22 t23))
+(define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15 t16 t17 t18 t19 t20 t21 t22 t23 t24))
 
 (define (run)
-  (for-each (lambda (t)
-	      (display "document.write(")
-	      (write (with-output-to-string (lambda () (write t))))
-	      (display "+\": \"+")
-	      (newline)
-	      (go t)
-	      (display "+\"<br/>\");")
-	      (newline) (newline)) tests))
+  (display (with-output-to-string
+             (lambda ()
+               (for-each (lambda (t)
+                           (display "document.write(")
+                           (write (with-output-to-string (lambda () (write t))))
+                           (display "+\": \"+")
+                           (newline)
+                           (go t)
+                           (display "+\"<br/>\");")
+                           (newline) (newline)) tests)))))
 
 ;(define t15 '((define (x y) y) (x 1)))
 (define (go-top t)

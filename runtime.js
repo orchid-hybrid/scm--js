@@ -1,6 +1,4 @@
-function runtime_dash_booleanize(b){return (b != false);}
-
-function null_huh_(n){return n==null;}
+function runtime_dash_booleanize(b){return (b !== false);}
 
 function Pair(a, d) { this.car = a; this.cdr = d }
 
@@ -47,3 +45,35 @@ function number_huh_(t) { return typeof t === "number"; }
 function boolean_huh_(t) { return typeof t === "boolean"; }
 function string_huh_(t) { return typeof t === "string"; }
 function constant_huh_(t) { return numberp(t) || booleanp(t) || stringp(t); }
+function eq_huh_(x, y) { return x === y }
+
+
+function Ref(v) { this.val = v; }
+Ref.prototype.get = function() { return this.val; };
+Ref.prototype.set = function(v1) { this.val = v1; };
+
+function ref(v) { return new Ref(v); }
+
+function console_log(s) { console.log(s); return true; }
+var output_port = new Ref(console_log);
+var display = function(s) { return output_port.get()(s); }
+
+function string_builder() {
+    var buffer = [];
+    var push = function(s) { buffer.push(s); return true; };
+    var join = function() {
+        console.log(buffer.join(""));
+        return buffer.join(""); };
+    return { push: push, join: join };
+}
+
+function with_output_to_string(t) {
+    var old = output_port.get();
+    var builder = string_builder();
+    output_port.set(builder.push);
+    t();
+    output_port.set(old);
+    return builder.join();
+}
+
+var with_dash_output_dash_to_dash_string = with_output_to_string;

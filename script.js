@@ -90,3 +90,7 @@ document.write("(not 3)"+": "+
 ((not)(3))
 +"<br/>");
 
+document.write("(with-output-to-string (lambda () (display \"1\") (display \"2\") (display \"3\")))"+": "+
+((with_dash_output_dash_to_dash_string)(function(){(display)("1"); (display)("2"); return (display)("3")}))
++"<br/>");
+
