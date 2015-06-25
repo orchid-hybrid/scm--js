@@ -1,18 +1,19 @@
 function last(l){return (runtime_dash_booleanize((null_huh_)(l)))?(false):((runtime_dash_booleanize((null_huh_)((l).cdr)))?((l).car):((last)((l).cdr)))};
+
 document.write("42"+": "+
 (42)
 +"<br/>");
 
 document.write("(car (cons 4 2))"+": "+
-(({car:4, cdr:2}).car)
+((car)(cons(4, 2)))
 +"<br/>");
 
 document.write("(cdr (cons 4 2))"+": "+
-(({car:4, cdr:2}).cdr)
+((cdr)(cons(4, 2)))
 +"<br/>");
 
 document.write("(+ (car (cons 4 2)) (cdr (cons 4 2)))"+": "+
-(js_dash_plus(({car:4, cdr:2}).car, ({car:4, cdr:2}).cdr))
+(js_dash_plus((car)(cons(4, 2)), (cdr)(cons(4, 2))))
 +"<br/>");
 
 document.write("(- (+ 42 (* 3 6)) 7)"+": "+
@@ -52,11 +53,11 @@ document.write("(begin 1 2 3 (begin 4 5 6))"+": "+
 +"<br/>");
 
 document.write("((if #t car cdr) (cons 4 2))"+": "+
-(((runtime_dash_booleanize(true))?(car):(cdr))({car:4, cdr:2}))
+(((runtime_dash_booleanize(true))?(car):(cdr))(cons(4, 2)))
 +"<br/>");
 
 document.write("(last (cons 4 (cons 1 (cons 2 ()))))"+": "+
-((last)({car:4, cdr:{car:1, cdr:{car:2, cdr:null}}}))
+((last)(cons(4, cons(1, cons(2, null)))))
 +"<br/>");
 
 document.write("(string->symbol \"x\")"+": "+
@@ -64,9 +65,17 @@ document.write("(string->symbol \"x\")"+": "+
 +"<br/>");
 
 document.write("(car (cdr (quote (my other car))))"+": "+
-((({car:js_dash_string_dash__gt_symbol("my"), cdr:{car:js_dash_string_dash__gt_symbol("other"), cdr:{car:js_dash_string_dash__gt_symbol("car"), cdr:null}}}).cdr).car)
+((car)((cdr)({car:js_dash_string_dash__gt_symbol("my"), cdr:{car:js_dash_string_dash__gt_symbol("other"), cdr:{car:js_dash_string_dash__gt_symbol("car"), cdr:null}}})))
 +"<br/>");
 
 document.write("(car (cdr (list (quote my) (quote other) (quote car))))"+": "+
-((((list)(js_dash_string_dash__gt_symbol("my"), js_dash_string_dash__gt_symbol("other"), js_dash_string_dash__gt_symbol("car"))).cdr).car)
+((car)((cdr)((list)(js_dash_string_dash__gt_symbol("my"), js_dash_string_dash__gt_symbol("other"), js_dash_string_dash__gt_symbol("car")))))
++"<br/>");
+
+document.write("(car (cdr ((lambda (o) (quasiquote (my (unquote o) car))) (quote other))))"+": "+
+((car)((cdr)((function(o){return cons(js_dash_string_dash__gt_symbol("my"), cons(o, cons(js_dash_string_dash__gt_symbol("car"), null)))})(js_dash_string_dash__gt_symbol("other")))))
++"<br/>");
+
+document.write("((lambda (x) (cond ((null? x) (quote null)) ((pair? x) (quote pair)) (else (quote other)))) (quote (1 . 2)))"+": "+
+((function(x){return (runtime_dash_booleanize((null_huh_)(x)))?((function(){return js_dash_string_dash__gt_symbol("null")})()):((runtime_dash_booleanize((pair_huh_)(x)))?((function(){return js_dash_string_dash__gt_symbol("pair")})()):((function(){return js_dash_string_dash__gt_symbol("other")})()))})(cons(1, 2)))
 +"<br/>");

@@ -38,3 +38,12 @@ function array_to_list(arr) {
 function list() {
     return array_to_list(arguments);
 }
+
+function null_huh_(x) { return x === null; }
+function procedure_huh_(x) { return x instanceof Function; }
+function symbol_huh_(x) { return x instanceof Symbol; }
+function pair_huh_(x) { return x instanceof Pair; }
+function number_huh_(t) { return typeof t === "number"; }
+function boolean_huh_(t) { return typeof t === "boolean"; }
+function string_huh_(t) { return typeof t === "string"; }
+function constant_huh_(t) { return numberp(t) || booleanp(t) || stringp(t); }
