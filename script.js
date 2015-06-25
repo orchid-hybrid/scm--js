@@ -1,5 +1,4 @@
 function last(l){return (runtime_dash_booleanize((null_huh_)(l)))?(false):((runtime_dash_booleanize((null_huh_)((l).cdr)))?((l).car):((last)((l).cdr)))};
-
 document.write("42"+": "+
 (42)
 +"<br/>");
@@ -60,6 +59,14 @@ document.write("(last (cons 4 (cons 1 (cons 2 ()))))"+": "+
 ((last)({car:4, cdr:{car:1, cdr:{car:2, cdr:null}}}))
 +"<br/>");
 
+document.write("(string->symbol \"x\")"+": "+
+(js_dash_string_dash__gt_symbol("x"))
++"<br/>");
+
 document.write("(car (cdr (quote (my other car))))"+": "+
 ((({car:js_dash_string_dash__gt_symbol("my"), cdr:{car:js_dash_string_dash__gt_symbol("other"), cdr:{car:js_dash_string_dash__gt_symbol("car"), cdr:null}}}).cdr).car)
++"<br/>");
+
+document.write("(car (cdr (list (quote my) (quote other) (quote car))))"+": "+
+((((list)(js_dash_string_dash__gt_symbol("my"), js_dash_string_dash__gt_symbol("other"), js_dash_string_dash__gt_symbol("car"))).cdr).car)
 +"<br/>");

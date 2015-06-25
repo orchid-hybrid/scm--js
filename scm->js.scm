@@ -242,10 +242,11 @@
 (define t15 '(last (cons 4 (cons 1 (cons 2 ())))))
 (define t16 '(string->symbol "x"))
 (define t17 '(car (cdr '(my other car))))
+(define t18 '(car (cdr (list 'my 'other 'car))))
 
 (define (go t) (display "(") (js->javascript (scm->js t)) (display ")") (newline))
 
-(define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15 t16 t17))
+(define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15 t16 t17 t18))
 
 (define (run)
   (for-each (lambda (t)
