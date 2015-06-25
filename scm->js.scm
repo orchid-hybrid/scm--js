@@ -164,6 +164,8 @@
              (append (string->list "_bang_") (mangle-helper (cdr n))))
             ((eq? #\= (car n))
              (append (string->list "_eq_") (mangle-helper (cdr n))))
+            ((eq? #\* (car n))
+             (append (string->list "_star_") (mangle-helper (cdr n))))
 	    (else
 	     (cons (car n) (mangle-helper (cdr n)))))))
 

@@ -166,3 +166,23 @@ document.write("(even? 42)"+": "+
 write_to_string(((even_huh_)(42))
 )+"<br/>");
 
+document.write("(go 42)"+": "+
+write_to_string(((go)(42))
+)+"<br/>");
+
+document.write("(go (car (cons 4 2)))"+": "+
+write_to_string(((go)((car)((cons)(4, 2))))
+)+"<br/>");
+
+document.write("(go (cdr (cons 4 2)))"+": "+
+write_to_string(((go)((cdr)((cons)(4, 2))))
+)+"<br/>");
+
+document.write("(go (+ (car (cons 4 2)) (cdr (cons 4 2))))"+": "+
+write_to_string(((go)(js_dash_plus((car)((cons)(4, 2)), (cdr)((cons)(4, 2)))))
+)+"<br/>");
+
+document.write("(go (- (+ 42 (* 3 6)) 7))"+": "+
+write_to_string(((go)(js_dash_minus(js_dash_plus(42, js_dash_times(3, 6)), 7)))
+)+"<br/>");
+
