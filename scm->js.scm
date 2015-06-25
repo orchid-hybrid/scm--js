@@ -46,16 +46,21 @@
          `(js-function
            ,(cadr scm)
            (js-return ,(scm->js (caddr scm)))))
-        ((and (list? scm) (lambda-expression? (car scm)))
-         `(js-funcall* ,(scm->js (car scm)) . ,(map scm->js (cdr scm))))
-	((and (list? scm) (runtime-primitive? (car scm)))
-	 `(js-funcall ,(runtime-primitive? (car scm)) . ,(map scm->js (cdr scm))))
+
 	((if-expression? scm) `(js-if (js-funcall runtime-booleanize ,(scm->js (cadr scm)))
 				      ,(scm->js (caddr scm))
 				      ,(scm->js (cadddr scm))))
-	((begin-expression? scm)
+        ((begin-expression? scm)
 	 `(js-funcall* (js-function () . ,(append (map scm->js (but-last (cdr scm)))
-						  (list `(js-return ,(scm->js (last (cdr scm)))))))))))
+						  (list `(js-return ,(scm->js (last (cdr scm)))))))))
+
+	((and (list? scm) (runtime-primitive? (car scm)))
+	 `(js-funcall ,(runtime-primitive? (car scm)) . ,(map scm->js (cdr scm))))
+
+        ((list? scm)
+         `(js-funcall* ,(scm->js (car scm)) . ,(map scm->js (cdr scm))))
+
+	))
 
 (define (js-object-literal? js) (kind-of-expression? 'js-object-literal 'even js))
 (define (js-dot? js) (kind-of-expression? 'js-dot 2 js))
@@ -191,5 +196,6 @@
 (define t11 '(lambda (x) x))
 (define t12 '((lambda (x) x) 1))
 (define t13 '(begin 1 2 3 (begin 4 5 6)))
+(define t14 '((if #t car cdr) (cons 4 2)))
 
 (define (go t) (js->javascript (scm->js t)) (newline) (newline))
