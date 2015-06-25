@@ -47,33 +47,28 @@ function string_huh_(t) { return typeof t === "string"; }
 function constant_huh_(t) { return numberp(t) || booleanp(t) || stringp(t); }
 function eq_huh_(x, y) { return x === y }
 
-
-function Ref(v) { this.val = v; }
-Ref.prototype.get = function() { return this.val; };
-Ref.prototype.set = function(v1) { this.val = v1; };
-
-function ref(v) { return new Ref(v); }
+function Box(v) { this.val = v; }
+function box(v) { return new Box(v); }
+function unbox(b) { return b.val; }
+function set_dash_box_bang_(b, v) { b.val = v; return true }
+function box_huh_(b) { return b instanceof Box; }
 
 function console_log(s) { console.log(s); return true; }
-var output_port = new Ref(console_log);
-var display = function(s) { return output_port.get()(s); }
+var output_port = box(console_log);
+var display = function(s) { return unbox(output_port)(s); }
 
 function string_builder() {
     var buffer = [];
     var push = function(s) { buffer.push(s); return true; };
-    var join = function() {
-        console.log(buffer.join(""));
-        return buffer.join(""); };
+    var join = function() { return buffer.join(""); };
     return { push: push, join: join };
 }
 
-function with_output_to_string(t) {
-    var old = output_port.get();
+function with_dash_output_dash_to_dash_string(t) {
+    var old = unbox(output_port);
     var builder = string_builder();
-    output_port.set(builder.push);
+    set_dash_box_bang_(output_port, builder.push);
     t();
-    output_port.set(old);
+    set_dash_box_bang_(output_port, old);
     return builder.join();
 }
-
-var with_dash_output_dash_to_dash_string = with_output_to_string;

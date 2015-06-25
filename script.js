@@ -94,3 +94,7 @@ document.write("(with-output-to-string (lambda () (display \"1\") (display \"2\"
 ((with_dash_output_dash_to_dash_string)(function(){(display)("1"); (display)("2"); return (display)("3")}))
 +"<br/>");
 
+document.write("(display \"1\")"+": "+
+((display)("1"))
++"<br/>");
+
