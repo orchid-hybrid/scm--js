@@ -55,6 +55,7 @@
   (cond ((null? scm) scm)
 	((number? scm) scm)
 	((string? scm) scm)
+	((char? scm) scm)
 	((boolean? scm) scm)
         ((symbol? scm) `(js-var ,scm))
 	((quote-expression? scm) (quoted->js (cadr scm)))
@@ -99,6 +100,7 @@
 (define (quoted->js exp)
   (cond ((number? exp) exp)
 	((string? exp) exp)
+	((char? exp) exp)
 	((boolean? exp) exp)
 	((null? exp) exp)
 	((symbol? exp) (scm->js `(string->symbol ,(symbol->string exp))))
@@ -172,6 +174,7 @@
   (cond ((null? js) (display "null"))
 	((number? js) (write js))
 	((string? js) (write js))
+	((char? js) (write (list->string (list js))))
 	((eq? #t js) (display "true"))
 	((eq? #f js) (display "false"))
 	((js-object-literal? js)
@@ -324,10 +327,12 @@
 (define t34 '(if-expression? '(uf a b c)))
 (define t35 '(if-expression? '(uf b c)))
 (define t36 '(runtime-primitive? 'string->symbol))
+(define t37 '(list->string (list #\h #\i)))
+(define t38 '(char? (car (list #\h #\i))))
 
 (define (go t) (display "(") (js->javascript (scm->js t)) (display ")") (newline))
 
-(define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15 t16 t17 t18 t19 t20 t21 t22 t23 t24 t25 t26 t27 t28 t29 t30 t31 t32 t33 t34 t35 t36))
+(define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15 t16 t17 t18 t19 t20 t21 t22 t23 t24 t25 t26 t27 t28 t29 t30 t31 t32 t33 t34 t35 t36 t37 t38))
 
 (define (run)
   (display (with-output-to-string

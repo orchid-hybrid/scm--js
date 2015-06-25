@@ -142,3 +142,11 @@ document.write("(runtime-primitive? (quote string->symbol))"+": "+
 ((runtime_dash_primitive_huh_)(js_dash_string_dash__gt_symbol("string->symbol")))
 +"<br/>");
 
+document.write("(list->string (list #\\h #\\i))"+": "+
+((list_dash__gt_string)((list)("h", "i")))
++"<br/>");
+
+document.write("(char? (car (list #\\h #\\i)))"+": "+
+((char_huh_)((car)((list)("h", "i"))))
++"<br/>");
+

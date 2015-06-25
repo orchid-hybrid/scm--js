@@ -52,6 +52,7 @@ function pair_huh_(x) { return x instanceof Pair; }
 function number_huh_(t) { return typeof t === "number"; }
 function boolean_huh_(t) { return typeof t === "boolean"; }
 function string_huh_(t) { return typeof t === "string"; }
+function char_huh_(t) { return typeof t === "string" && t.length == 1; }
 function constant_huh_(t) { return numberp(t) || booleanp(t) || stringp(t); }
 function eq_huh_(x, y) { return x === y }
 function _eq_(x, y) { return number_huh_(x) && number_huh_(y) && x == y; }
