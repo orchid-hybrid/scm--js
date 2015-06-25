@@ -1,3 +1,17 @@
+(define (but-last l)
+  (if (null? l)
+      '()
+      (if (null? (cdr l))
+	  '()
+	  (cons (car l) (but-last (cdr l))))))
+
+(define (last l)
+  (if (null? l)
+      #f
+      (if (null? (cdr l))
+	  (car l)
+	  (last (cdr l)))))
+
 (define (kind-of-expression? kind args exp)
   (and (list? exp) (eq? kind (car exp))
        (cond ((number? args) (= (+ 1 args) (length exp)))
@@ -10,6 +24,7 @@
 (define (if-expression? exp) (kind-of-expression? 'if 3 exp))
 (define (lambda-expression? exp)
   (and (list? exp) (eq? (car exp) 'lambda) (list? (cadr exp)) (list? (cddr exp))))
+(define (begin-expression? exp) (kind-of-expression? 'begin 'one+ exp))
 
 (define (runtime-primitive? op)
   (cond ((eq? op '+) 'js-plus)
@@ -37,14 +52,17 @@
 	 `(js-funcall ,(runtime-primitive? (car scm)) . ,(map scm->js (cdr scm))))
 	((if-expression? scm) `(js-if (js-funcall runtime-booleanize ,(scm->js (cadr scm)))
 				      ,(scm->js (caddr scm))
-				      ,(scm->js (cadddr scm))))))
+				      ,(scm->js (cadddr scm))))
+	((begin-expression? scm)
+	 `(js-funcall* (js-function () . ,(append (map scm->js (but-last (cdr scm)))
+						  (list `(js-return ,(scm->js (last (cdr scm)))))))))))
 
 (define (js-object-literal? js) (kind-of-expression? 'js-object-literal 'even js))
 (define (js-dot? js) (kind-of-expression? 'js-dot 2 js))
 (define (js-funcall*? js) (kind-of-expression? 'js-funcall* 'one+ js))
 (define (js-funcall? js) (kind-of-expression? 'js-funcall 'one+ js))
 (define (js-if? js) (kind-of-expression? 'js-if 3 js))
-(define (js-function? js) (kind-of-expression? 'js-function 2 js))
+(define (js-function? js) (kind-of-expression? 'js-function 'one+ js))
 (define (js-return? js) (kind-of-expression? 'js-return 1 js))
 (define (js-var? js) (kind-of-expression? 'js-var 1 js))
 
@@ -110,7 +128,7 @@
          (do-js-funargs (cadr js))
          (display ")")
          (display "{")
-         (js->javascript (caddr js))
+         (do-js-sequence (cddr js))
          (display "}"))))
 
 (define (do-js-object-literal kvs)
@@ -148,6 +166,17 @@
 	      (display ", ")
 	      (do-js-funargs (cdr kvs)))))))
 
+(define (do-js-sequence exps)
+  (if (null? exps)
+      0
+      (begin
+        (js->javascript (car exps))
+	(if (null? (cdr exps))
+	    0
+	    (begin
+	      (display "; ")
+	      (do-js-sequence (cdr exps)))))))
+
 
 (define t1 '42)
 (define t2 '(car (cons 4 2)))
@@ -161,5 +190,6 @@
 (define t10 '(if #t car cdr))
 (define t11 '(lambda (x) x))
 (define t12 '((lambda (x) x) 1))
+(define t13 '(begin 1 2 3 (begin 4 5 6)))
 
 (define (go t) (js->javascript (scm->js t)) (newline) (newline))
