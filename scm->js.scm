@@ -32,6 +32,8 @@
 	((eq? op '-) 'js-minus)
 	((eq? op '*) 'js-times)
 	((eq? op 'runtime-booleanize) 'runtime-booleanize)
+        ((eq? op 'symbol->string) 'js-string->symbol)
+        ((eq? op 'string->symbol) 'js-string->symbol)
 	(else #f)))
 
 (define (scm-top->js scm)
@@ -96,6 +98,8 @@
 	     (append (string->list "_huh_") (mangle-helper (cdr n))))
 	    ((eq? #\_ (car n))
 	     (append (string->list "_underscore_") (mangle-helper (cdr n))))
+            ((eq? #\> (car n))
+             (append (string->list "_gt_") (mangle-helper (cdr n))))
 	    (else
 	     (cons (car n) (mangle-helper (cdr n)))))))
 
@@ -224,10 +228,11 @@
 (define t13 '(begin 1 2 3 (begin 4 5 6)))
 (define t14 '((if #t car cdr) (cons 4 2)))
 (define t15 '(last (cons 4 (cons 1 (cons 2 ())))))
+(define t16 '(string->symbol "x"))
 
 (define (go t) (display "(") (js->javascript (scm->js t)) (display ")") (newline))
 
-(define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15))
+(define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15 t16))
 
 (define (run)
   (for-each (lambda (t)
