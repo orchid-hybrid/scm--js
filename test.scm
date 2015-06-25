@@ -52,11 +52,11 @@
 (define t41 '(even? 41))
 (define t42 '(even? 42))
 
-(define m1 `(go ,t1))
-(define m2 `(go ,t2))
-(define m3 `(go ,t3))
-(define m4 `(go ,t4))
-(define m5 `(go ,t5))
+(define m1 `(go ',t1))
+(define m2 `(go ',t2))
+(define m3 `(go ',t3))
+(define m4 `(go ',t4))
+(define m5 `(go ',t5))
 
 (define (go t) (display "(") (js->javascript (scm->js t)) (display ")") (newline))
 
