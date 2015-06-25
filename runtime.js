@@ -1,5 +1,6 @@
 function runtime_dash_booleanize(b){return (b != false);}
 
+function null_huh_(n){return n==null;}
 
 function car(c){return c.car;}
 function cdr(c){return c.cdr;}
