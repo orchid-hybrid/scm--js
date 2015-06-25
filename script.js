@@ -158,3 +158,11 @@ document.write("(write \"asd \\\" f\")"+": "+
 write_to_string(((write)("asd \" f"))
 )+"<br/>");
 
+document.write("(even? 41)"+": "+
+write_to_string(((even_huh_)(41))
+)+"<br/>");
+
+document.write("(even? 42)"+": "+
+write_to_string(((even_huh_)(42))
+)+"<br/>");
+
