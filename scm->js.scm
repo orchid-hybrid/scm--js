@@ -279,10 +279,13 @@
                 (cond ((null? x) 'null)
                       ((pair? x) 'pair)
                       (else 'other))) '(1 . 2)))
+(define t21 '(not #t))
+(define t22 '(not #f))
+(define t23 '(not 3))
 
 (define (go t) (display "(") (js->javascript (scm->js t)) (display ")") (newline))
 
-(define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15 t16 t17 t18 t19 t20))
+(define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15 t16 t17 t18 t19 t20 t21 t22 t23))
 
 (define (run)
   (for-each (lambda (t)
@@ -298,3 +301,16 @@
 (define (go-top t)
   (for-each (lambda (t) (js->javascript (scm-top->js t)) (display ";") (newline)) t)
   (newline))
+
+(define standard
+  '((define (last l)
+       (if (null? l)
+	   #f
+	   (if (null? (cdr l))
+	       (car l)
+	       (last (cdr l)))))
+    (define (not b)
+      (if b #f #t))))
+
+(define (std)
+  (go-top standard))
