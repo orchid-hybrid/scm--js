@@ -126,3 +126,19 @@ document.write("(list->string (but-last (string->list \"foobar\")))"+": "+
 ((list_dash__gt_string)((but_dash_last)((string_dash__gt_list)("foobar"))))
 +"<br/>");
 
+document.write("(if-expression? (quote (if a b c)))"+": "+
+((if_dash_expression_huh_)(cons(js_dash_string_dash__gt_symbol("if"), cons(js_dash_string_dash__gt_symbol("a"), cons(js_dash_string_dash__gt_symbol("b"), cons(js_dash_string_dash__gt_symbol("c"), null))))))
++"<br/>");
+
+document.write("(if-expression? (quote (uf a b c)))"+": "+
+((if_dash_expression_huh_)(cons(js_dash_string_dash__gt_symbol("uf"), cons(js_dash_string_dash__gt_symbol("a"), cons(js_dash_string_dash__gt_symbol("b"), cons(js_dash_string_dash__gt_symbol("c"), null))))))
++"<br/>");
+
+document.write("(if-expression? (quote (uf b c)))"+": "+
+((if_dash_expression_huh_)(cons(js_dash_string_dash__gt_symbol("uf"), cons(js_dash_string_dash__gt_symbol("b"), cons(js_dash_string_dash__gt_symbol("c"), null)))))
++"<br/>");
+
+document.write("(runtime-primitive? (quote string->symbol))"+": "+
+((runtime_dash_primitive_huh_)(js_dash_string_dash__gt_symbol("string->symbol")))
++"<br/>");
+

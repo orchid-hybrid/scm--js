@@ -320,10 +320,14 @@
 (define t30 '(and 1 2 3))
 (define t31 '(and 1 #f 2 3))
 (define t32 '(list->string (but-last (string->list "foobar"))))
+(define t33 '(if-expression? '(if a b c)))
+(define t34 '(if-expression? '(uf a b c)))
+(define t35 '(if-expression? '(uf b c)))
+(define t36 '(runtime-primitive? 'string->symbol))
 
 (define (go t) (display "(") (js->javascript (scm->js t)) (display ")") (newline))
 
-(define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15 t16 t17 t18 t19 t20 t21 t22 t23 t24 t25 t26 t27 t28 t29 t30 t31 t32))
+(define tests (list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15 t16 t17 t18 t19 t20 t21 t22 t23 t24 t25 t26 t27 t28 t29 t30 t31 t32 t33 t34 t35 t36))
 
 (define (run)
   (display (with-output-to-string
@@ -362,7 +366,38 @@
     (define (list->string l)
       (if (null? l)
 	  ""
-	  (string-append (char->string (car l)) (list->string (cdr l)))))))
+	  (string-append (char->string (car l)) (list->string (cdr l)))))
+
+    (define (length l) (if (null? l) 0 (+ 1 (length (cdr l)))))
+
+    (define (kind-of-expression? kind args exp)
+      (and (list? exp) (not (null? exp)) (eq? kind (car exp))
+	   (cond ((number? args) (= (+ 1 args) (length exp)))
+		 ((eq? 'even args) (even? (length (cdr exp))))
+		 ((eq? 'one+ args) (not (null? (cdr exp)))))))
+    (define (if-expression? exp) (kind-of-expression? 'if 3 exp))
+    (define (lambda-expression? exp)
+      (and (list? exp) (eq? (car exp) 'lambda) (list? (cadr exp)) (list? (cddr exp))))
+    (define (begin-expression? exp) (kind-of-expression? 'begin 'one+ exp))
+    (define (define-expression? exp) (kind-of-expression? 'define 'one+ exp))
+    (define (quote-expression? exp) (kind-of-expression? 'quote 1 exp))
+    (define (quasiquote-expression? exp) (kind-of-expression? 'quasiquote 1 exp))
+    (define (unquote-expression? exp) (kind-of-expression? 'unquote 1 exp))
+    (define (cond-expression? exp) (and (list? exp) (eq? 'cond (car exp))))
+    (define (or-expression? exp) (kind-of-expression? 'or 'one+ exp))
+    (define (and-expression? exp) (kind-of-expression? 'and 'one+ exp))
+    
+    (define (runtime-primitive? op)
+      (cond ((eq? op '+) 'js-plus)
+	    ((eq? op '-) 'js-minus)
+	    ((eq? op '*) 'js-times)
+	    ((eq? op 'runtime-booleanize) 'runtime-booleanize)
+	    ((eq? op 'symbol->string) 'js-string->symbol)
+	    ((eq? op 'string->symbol) 'js-string->symbol)
+	    ((eq? op 'cons) 'cons)
+	    (else #f)))
+    
+    ))
 
 (define (std)
   (go-top standard))
