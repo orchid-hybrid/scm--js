@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Scm--js by orchid-hybrid</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Scm--js</h1>
+        <p>scm-&gt;js</p>
+
+        <p class="view"><a href="https://github.com/orchid-hybrid/scm--js">View the Project on GitHub <small>orchid-hybrid/scm--js</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/orchid-hybrid/scm--js/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/orchid-hybrid/scm--js/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/orchid-hybrid/scm--js">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="what-is-scm-js" class="anchor" href="#what-is-scm-js" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is scm-&gt;js?</h1>
+
+<p>This project is a scheme to javascript transpiler (a transpiler is a compiler that goes horizontally instead of from a high level language to a low level one). It's written in scheme so it can compile itself!</p>
+
+<p>It works by looking over the scheme code and printing out an equivalent bit of javascript code for each part. Since we were able to compile the compiler itself we could make a interactive scheme repl inside the browser that works by compiling the code into js then using javascripts "eval" function.</p>
+
+<h1>
+<a id="what-are-the-files" class="anchor" href="#what-are-the-files" aria-hidden="true"><span class="octicon octicon-link"></span></a>What are the files?</h1>
+
+<p>The compiler itself is here: <a href="https://github.com/orchid-hybrid/scm--js/blob/master/scm-%3Ejs.scm">scm-&gt;js.scm</a>. It's just under 300 lines of code!</p>
+
+<p>The code it generates requires some helper primitives (like arithmetic, cons/car/cdr, and I/O) that are programmed by hand in javascript: <a href="https://github.com/orchid-hybrid/scm--js/blob/master/runtime.js">runtime.js</a></p>
+
+<p>there is a small standard library programmed in scheme to suppliment the primitives, <a href="standard.scm">https://github.com/orchid-hybrid/scm--js/blob/master/standard.scm</a> which is compiled to produce <a href="https://github.com/orchid-hybrid/scm--js/blob/master/standard.js">standard.js</a></p>
+
+<p>We compiled the compiler itself to produce this file: <a href="https://github.com/orchid-hybrid/scm--js/blob/master/compiler.js">compiler.js</a></p>
+
+<p>We're using the lisp reader in javascript from <a href="https://github.com/tca/veneer">veneer compiler</a>, and that's here: <a href="https://github.com/orchid-hybrid/scm--js/blob/master/reader.js">reader.js</a></p>
+
+<p>We build the compiler step by step, making sure it could do simple expressions before working on more complicated ones. You can see each step in the list of tests here: <a href="https://github.com/orchid-hybrid/scm--js/blob/master/test.scm">test.scm</a>. That same file is used by <a href="https://github.com/orchid-hybrid/scm--js/blob/master/build.sh">build.sh</a> to produce the compiled javascript files.</p>
+
+<h1>
+<a id="what-did-i-learn-from-this" class="anchor" href="#what-did-i-learn-from-this" aria-hidden="true"><span class="octicon octicon-link"></span></a>What did I learn from this?</h1>
+
+<ul>
+<li>It can be really fun to program with a friend (we took turns to code parts of it and that kept up a lot of momentum)</li>
+<li>You can write a simple compiler in just a couple of days!</li>
+<li>Making it easy to test and having a comprehensive list of tests will help keep your code correct</li>
+<li>The main parts of a transpiler are: recognizing each syntax element, translation from input language to intermediate language, name mangling and string escaping, formatting the IL into the target language.</li>
+</ul>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/orchid-hybrid">orchid-hybrid</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
