@@ -35,6 +35,7 @@
   (cond ((eq? op '+) 'js-plus)
 	((eq? op '-) 'js-minus)
 	((eq? op '*) 'js-times)
+	((eq? op '>) 'js-gt)
 	((eq? op 'runtime-booleanize) 'runtime-booleanize)
 	(else #f)))
 
@@ -127,7 +128,7 @@
    ;; (cond)
    ((null? (cdr scm)) '())
    ;; (cond (els b))
-   ((and (equal? 'else (caadr scm))
+   ((and (eq? 'else (caadr scm))
          (= 2 (length scm)))
     (scm->js (cons 'begin (cdadr scm))))
    ;; (cond (a b))

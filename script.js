@@ -1,3 +1,4 @@
+"use strict"
 document.write("42"+": "+
 write_to_string((42)
 )+"<br/>");
@@ -166,23 +167,27 @@ document.write("(even? 42)"+": "+
 write_to_string(((even_huh_)(42))
 )+"<br/>");
 
-document.write("(go (quote 42))"+": "+
-write_to_string(((go)(42))
+document.write("(go1 (quote 42))"+": "+
+write_to_string(((go1)(42))
 )+"<br/>");
 
-document.write("(write (scm->js (quote (car (cons 4 2)))))"+": "+
-write_to_string(((write)((scm_dash__gt_js)(cons((string_dash__gt_symbol)("car"), cons(cons((string_dash__gt_symbol)("cons"), cons(4, cons(2, null))), null)))))
+document.write("(go1 (quote (car (cons 4 2))))"+": "+
+write_to_string(((go1)(cons((string_dash__gt_symbol)("car"), cons(cons((string_dash__gt_symbol)("cons"), cons(4, cons(2, null))), null))))
 )+"<br/>");
 
-document.write("(write (scm->js (quote (cdr (cons 4 2)))))"+": "+
-write_to_string(((write)((scm_dash__gt_js)(cons((string_dash__gt_symbol)("cdr"), cons(cons((string_dash__gt_symbol)("cons"), cons(4, cons(2, null))), null)))))
+document.write("(go1 (quote (cdr (cons 4 2))))"+": "+
+write_to_string(((go1)(cons((string_dash__gt_symbol)("cdr"), cons(cons((string_dash__gt_symbol)("cons"), cons(4, cons(2, null))), null))))
 )+"<br/>");
 
-document.write("(js->javascript (quote (js-funcall* (js-var car) (js-funcall* (js-var cons) 4))))"+": "+
-write_to_string(((js_dash__gt_javascript)(cons((string_dash__gt_symbol)("js-funcall*"), cons(cons((string_dash__gt_symbol)("js-var"), cons((string_dash__gt_symbol)("car"), null)), cons(cons((string_dash__gt_symbol)("js-funcall*"), cons(cons((string_dash__gt_symbol)("js-var"), cons((string_dash__gt_symbol)("cons"), null)), cons(4, null))), null)))))
+document.write("(go1 (quote (+ (car (cons 4 2)) (cdr (cons 4 2)))))"+": "+
+write_to_string(((go1)(cons((string_dash__gt_symbol)("+"), cons(cons((string_dash__gt_symbol)("car"), cons(cons((string_dash__gt_symbol)("cons"), cons(4, cons(2, null))), null)), cons(cons((string_dash__gt_symbol)("cdr"), cons(cons((string_dash__gt_symbol)("cons"), cons(4, cons(2, null))), null)), null)))))
 )+"<br/>");
 
-document.write("(go (quote (- (+ 42 (* 3 6)) 7)))"+": "+
-write_to_string(((go)(cons((string_dash__gt_symbol)("-"), cons(cons((string_dash__gt_symbol)("+"), cons(42, cons(cons((string_dash__gt_symbol)("*"), cons(3, cons(6, null))), null))), cons(7, null)))))
+document.write("(go1 (quote (- (+ 42 (* 3 6)) 7)))"+": "+
+write_to_string(((go1)(cons((string_dash__gt_symbol)("-"), cons(cons((string_dash__gt_symbol)("+"), cons(42, cons(cons((string_dash__gt_symbol)("*"), cons(3, cons(6, null))), null))), cons(7, null)))))
+)+"<br/>");
+
+document.write("(eval (go-top1 (quote ((define (for-each1 f xs) (if (null? xs) (quote ()) (begin (f (car xs)) (map f (cdr xs))))) (with-output-to-string (lambda () (for-each1 display (string->list \"foobar\"))))))))"+": "+
+write_to_string(((eval)((go_dash_top1)(cons(cons((string_dash__gt_symbol)("define"), cons(cons((string_dash__gt_symbol)("for-each1"), cons((string_dash__gt_symbol)("f"), cons((string_dash__gt_symbol)("xs"), null))), cons(cons((string_dash__gt_symbol)("if"), cons(cons((string_dash__gt_symbol)("null?"), cons((string_dash__gt_symbol)("xs"), null)), cons(cons((string_dash__gt_symbol)("quote"), cons(null, null)), cons(cons((string_dash__gt_symbol)("begin"), cons(cons((string_dash__gt_symbol)("f"), cons(cons((string_dash__gt_symbol)("car"), cons((string_dash__gt_symbol)("xs"), null)), null)), cons(cons((string_dash__gt_symbol)("map"), cons((string_dash__gt_symbol)("f"), cons(cons((string_dash__gt_symbol)("cdr"), cons((string_dash__gt_symbol)("xs"), null)), null))), null))), null)))), null))), cons(cons((string_dash__gt_symbol)("with-output-to-string"), cons(cons((string_dash__gt_symbol)("lambda"), cons(null, cons(cons((string_dash__gt_symbol)("for-each1"), cons((string_dash__gt_symbol)("display"), cons(cons((string_dash__gt_symbol)("string->list"), cons("foobar", null)), null))), null))), null)), null)))))
 )+"<br/>");
 

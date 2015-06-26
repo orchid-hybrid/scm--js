@@ -8,6 +8,7 @@ function cdr(c){return c.cdr;}
 function js_dash_plus(x,y){return x+y}
 function js_dash_minus(x,y){return x-y}
 function js_dash_times(x,y){return x*y}
+function js_dash_gt(x,y){return x>y}
 function even_huh_(n){return n%2==0;}
 
 
@@ -15,7 +16,7 @@ function Symbol(str) { this.string = str; }
 Symbol.prototype.toString = function () { return this.string }
 
 var __symbol_table = new Object(null);
-function __intern(string) {
+function intern(string) {
     if (__symbol_table.hasOwnProperty(string)) {
         return __symbol_table[string];
     } else {
@@ -25,7 +26,7 @@ function __intern(string) {
     }
 }
 function symbol_dash__gt_string(s){return s.string}
-function string_dash__gt_symbol(s){return __intern(s)}
+function string_dash__gt_symbol(s){return intern(s)}
 
 function array_to_list(arr) {
     var i = arr.length;
@@ -148,3 +149,18 @@ function display(s) { return print(write_to_string(s, false)); }
 function write(s) { return print(write_to_string(s, true)); }
 
 function error(s) { throw Error(s); }
+
+function reverse_aux(lst, memo) {
+    while(lst !== null) {
+        memo = cons(lst.car, memo);
+        lst = lst.cdr;
+    } return memo;
+}
+
+function reverse(lst) {
+    return reverse_aux(lst, null);
+}
+
+function read_dash_top() {
+    return read_top(null, new Stream(document.getElementById("repl").value));
+}
