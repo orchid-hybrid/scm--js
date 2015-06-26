@@ -161,6 +161,8 @@ function reverse(lst) {
     return reverse_aux(lst, null);
 }
 
-function read_dash_top() {
-    return read_top(null, new Stream(document.getElementById("repl").value));
+function with_dash_read_dash_top(cont) {
+    return repl_getline(function(value) {
+        return cont(read_top(null, new Stream(value)));
+    });
 }
