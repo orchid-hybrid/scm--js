@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <script src="runtime.js"></script>
+    <script src="standard.js"></script>
+    <script src="compiler.js"></script>
+    <script src="reader.js"></script>
+    <style type="text/css">
+      .inputbox { width:100%; border:1px solid #ccc; min-height:4em;}
+      .resultbox { font-weight:bold; margin:0; width:100%; background-color: #f1f1f1; padding:2px 6px; }
+      .printbox { margin:0; width:100%; background-color: #f1f1f1; padding:2px 6px; }
+    </style>
+  </head>
+  <body>
+    <div id="repl">
+    </div>
+
+    <script type="text/javascript">
+      var repl = document.getElementById("repl");
+
+      function repl_dash_print(result_val) {
+      var result = document.createElement("pre");
+      result.className += "printbox";
+      result.appendChild(document.createTextNode(result_val));
+      repl.appendChild(result);
+      }
+
+        function repl_getline(cont) {
+            var inputbox = document.createElement("pre");
+            inputbox.className += "inputbox";
+            inputbox.contentEditable = true;
+            inputbox.onkeypress = function(e) {
+                if (e.keyCode == 13 && inputbox.textContent!=="") {
+                    var result_val = cont(inputbox.textContent);
+                    inputbox.contentEditable = false;
+                    var result = document.createElement("pre");
+                    result.className += "resultbox";
+                    result.appendChild(document.createTextNode("=> " + result_val));
+                    repl.appendChild(result);
+                    compile_dash_eval();
+                    return false;
+                }
+            };
+
+            repl.appendChild(inputbox);
+            inputbox.focus();
+            current_input = inputbox;
+            return inputbox;
+        }
+      
+      compile_dash_eval();
+
+    </script>
+  </body>
+</html>
