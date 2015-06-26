@@ -65,7 +65,7 @@ function box_huh_(b) { return b instanceof Box; }
 
 function console_log(s) { console.log(s); return true; }
 var output_port = box(console_log);
-var display = function(s) { return unbox(output_port)(s); }
+var print = function(s) { return unbox(output_port)(s); }
 
 function string_builder() {
     var buffer = [];
@@ -84,7 +84,7 @@ function with_dash_output_dash_to_dash_string(t) {
 }
 
 function newline() {
-    display("\n");
+    print("\n");
     return true;
 }
 
@@ -106,7 +106,7 @@ function quote_string(s) {
     return memo.join("");
 }
 
-function write_to_string(x) {
+function write_to_string(x, writep) {
     if (number_huh_(x)) {
         return x.toString();
     } else if (boolean_huh_(x)) {
@@ -114,7 +114,7 @@ function write_to_string(x) {
     } else if (x === null) {
         return "()";
     } else if(string_huh_(x)) {
-        return quote_string(x);
+        return writep ? quote_string(x) : x;
     } else if (symbol_huh_(x)) {
         return x.string;
     } else if (pair_huh_(x)) {
@@ -122,15 +122,15 @@ function write_to_string(x) {
         var memo = [];
         while(true) {
             if(pair_huh_(cur.cdr)) {
-                memo.push(write_to_string(cur.car));
+                memo.push(write_to_string(cur.car, writep));
                 cur = cur.cdr;
             } else if (cur.cdr === null) {
-                memo.push(write_to_string(cur.car));
+                memo.push(write_to_string(cur.car, writep));
                 break;
             } else {
-                memo.push(write_to_string(cur.car));
+                memo.push(write_to_string(cur.car, writep));
                 memo.push(".");
-                memo.push(write_to_string(cur.cdr));
+                memo.push(write_to_string(cur.cdr, writep));
                 break;
             }
         } return ["(", memo.join(" "), ")"].join("");
@@ -143,6 +143,8 @@ function write_to_string(x) {
     }
 }
 
-function write(s) { return display(write_to_string(s)); }
+
+function display(s) { return print(write_to_string(s, false)); }
+function write(s) { return print(write_to_string(s, true)); }
 
 function error(s) { throw Error(s); }
