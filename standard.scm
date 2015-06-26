@@ -58,4 +58,4 @@
 (define (go-top1 t) (with-output-to-string (lambda () (go-top t))))
 
 (define (compile-eval)
-  (with-read-top (lambda (top) (with-output-handler repl-print (lambda ()(eval (go-top1 top)))))))
+  (with-read-top (lambda (top) (with-output-handler repl-print (lambda () (write-to-string (eval (go-top1 top)) #t))))))

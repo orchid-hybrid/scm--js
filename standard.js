@@ -38,5 +38,5 @@ function go(t){(display)("("); (js_dash__gt_javascript)((scm_dash__gt_js)(t)); (
 function go1(t){return (with_dash_output_dash_to_dash_string)(function(){return (go)(t)})};
 function go_dash_top(t){(for_dash_each)(function(t){(js_dash__gt_javascript)((scm_dash_top_dash__gt_js)(t)); (display)(";"); return (newline)()}, t); return (newline)()};
 function go_dash_top1(t){return (with_dash_output_dash_to_dash_string)(function(){return (go_dash_top)(t)})};
-function compile_dash_eval(){return (with_dash_read_dash_top)(function(top){return (with_dash_output_dash_handler)(repl_dash_print, function(){return (eval)((go_dash_top1)(top))})})};
+function compile_dash_eval(){return (with_dash_read_dash_top)(function(top){return (with_dash_output_dash_handler)(repl_dash_print, function(){return (write_dash_to_dash_string)((eval)((go_dash_top1)(top)), true)})})};
 

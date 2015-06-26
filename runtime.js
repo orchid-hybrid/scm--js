@@ -154,6 +154,7 @@ function write_to_string(x, writep) {
 }
 
 
+var write_dash_to_dash_string = write_to_string;
 function display(s) { return print(write_to_string(s, false)); }
 function write(s) { return print(write_to_string(s, true)); }
 
