@@ -84,6 +84,15 @@ function with_dash_output_dash_to_dash_string(t) {
     return builder.join();
 }
 
+
+function with_dash_output_dash_handler(fn, t) {
+    var old = unbox(output_port);
+    set_dash_box_bang_(output_port, fn);
+    var result = t();
+    set_dash_box_bang_(output_port, old);
+    return result;
+}
+
 function newline() {
     print("\n");
     return true;

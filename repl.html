@@ -6,7 +6,8 @@
     <script src="reader.js"></script>
     <style type="text/css">
       .inputbox { width:100%; border:1px solid #ccc; min-height:4em;}
-      .resultbox { width:100%; background-color: #f1f1f1; padding:2px 6px; }
+      .resultbox { font-weight:bold; margin:0; width:100%; background-color: #f1f1f1; padding:2px 6px; }
+      .printbox { margin:0; width:100%; background-color: #f1f1f1; padding:2px 6px; }
     </style>
   </head>
   <body>
@@ -15,6 +16,13 @@
 
     <script type="text/javascript">
       var repl = document.getElementById("repl");
+
+      function repl_dash_print(result_val) {
+      var result = document.createElement("pre");
+      result.className += "printbox";
+      result.appendChild(document.createTextNode(result_val));
+      repl.appendChild(result);
+      }
 
         function repl_getline(cont) {
             var inputbox = document.createElement("pre");
@@ -26,7 +34,7 @@
                     inputbox.contentEditable = false;
                     var result = document.createElement("pre");
                     result.className += "resultbox";
-                    result.appendChild(document.createTextNode(result_val));
+                    result.appendChild(document.createTextNode("=> " + result_val));
                     repl.appendChild(result);
                     compile_dash_eval();
                     return false;
