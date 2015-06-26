@@ -16,7 +16,8 @@
   (and (list? exp) (not (null? exp)) (eq? kind (car exp))
        (cond ((number? args) (= (+ 1 args) (length exp)))
 	     ((eq? 'even args) (even? (length (cdr exp))))
-	     ((eq? 'one+ args) (not (null? (cdr exp)))))))
+	     ((eq? 'one+ args) (not (null? (cdr exp))))
+             (else #f))))
 
 (define (if-expression? exp) (kind-of-expression? 'if 3 exp))
 (define (lambda-expression? exp)
@@ -55,7 +56,7 @@
 	((char? scm) scm)
 	((boolean? scm) scm)
         ((symbol? scm) `(js-var ,scm))
-	((quote-expression? scm) (quoted->js (cadr scm)))
+	((quote-expression? scm) (scm->js (quoted->js (cadr scm))))
 	((quasiquote-expression? scm) (scm->js (quasiquoted->js (cadr scm) 1)))
         ((cond-expression? scm) (cond->js scm))
         ((lambda-expression? scm)
@@ -72,11 +73,13 @@
         ((begin-expression? scm)
 	 (scm->js `((lambda () . ,(cdr scm)))))
 
-	((and (list? scm) (runtime-primitive? (car scm)))
+	((and (pair? scm) (runtime-primitive? (car scm)))
 	 `(js-funcall ,(runtime-primitive? (car scm)) . ,(map scm->js (cdr scm))))
 
         ((list? scm)
          `(js-funcall* ,(scm->js (car scm)) . ,(map scm->js (cdr scm))))
+
+        (else (error "unkown exp in cond->js"))
 
 	))
 
@@ -100,10 +103,11 @@
 	((char? exp) exp)
 	((boolean? exp) exp)
 	((null? exp) exp)
-	((symbol? exp) (scm->js `(string->symbol ,(symbol->string exp))))
+	((symbol? exp) `(string->symbol ,(symbol->string exp)))
 	((pair? exp)
-	 `(js-funcall cons ,(quoted->js (car exp))
-                      ,(quoted->js (cdr exp))))))
+	 `(cons ,(quoted->js (car exp))
+                ,(quoted->js (cdr exp))))
+        (else (error "unkown exp in cond->js"))))
 
 (define (quasiquoted->js term n)
   (cond
@@ -135,7 +139,8 @@
    ((> (length scm) 2)
     (scm->js `(if ,(caadr scm)
                   ,(cons 'begin (cdadr scm))
-                  (cond . ,(cddr scm)))))))
+                  (cond . ,(cddr scm)))))
+   (else (error "unkown exp in cond->js"))))
 
 (define (js-object-literal? js) (kind-of-expression? 'js-object-literal 'even js))
 (define (js-dot? js) (kind-of-expression? 'js-dot 2 js))
@@ -231,7 +236,8 @@
          (display ")")
          (display "{")
          (do-js-sequence (cdddr js))
-         (display "}"))))
+         (display "}"))
+        (else (error "unkown exp in cond->js"))))
 
 (define (do-js-object-literal kvs)
   (if (null? kvs)

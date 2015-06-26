@@ -136,9 +136,13 @@ function write_to_string(x) {
         } return ["(", memo.join(" "), ")"].join("");
     } else if (x && x.toString && typeof x.toString === "function") {
         return x.toString();
+    } else if (typeof x === 'undefined') {
+        return 'undefined';
     } else {
         return JSON.stringify(x);
     }
 }
 
 function write(s) { return display(write_to_string(s)); }
+
+function error(s) { throw Error(s); }

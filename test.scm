@@ -56,7 +56,7 @@
 (define m2 `(write (scm->js ',t2)))
 (define m3 `(write (scm->js ',t3)))
 (define m4 `(js->javascript '(js-funcall* (js-var car) (js-funcall* (js-var cons) 4))))
-(define m5 `(go ',t5))
+(define m5 `(go1 ',t5))
 
 (define (go t) (display "(") (js->javascript (scm->js t)) (display ")") (newline))
 
@@ -66,6 +66,7 @@
 (define (run)
   (display (with-output-to-string
              (lambda ()
+               (display "\"use strict\"") (newline)
                (for-each (lambda (t)
                            (display "document.write(")
                            (write (with-output-to-string (lambda () (write t))))
@@ -113,7 +114,7 @@
     (define (cddddr x) (cdr (cdr (cdr (cdr x)))))
 
     (define (map f xs)
-      (if (null? xs) '() (cons (f (car xs) (map f (cdr xs))))))
+      (if (null? xs) '() (cons (f (car xs)) (map f (cdr xs)))))
 
     (define (append x y)
       (if (null? x) y (cons (car x) (append (cdr x) y))))
@@ -131,6 +132,8 @@
     
     
     (define (go t) (display "(") (js->javascript (scm->js t)) (display ")") (newline))
+    
+    (define (go1 t) (with-output-to-string (lambda () (go t))))
     
     
     
